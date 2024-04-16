@@ -1,20 +1,16 @@
+import { controllerDecorator } from "../helpers/controllerDecorator.js";
 import contactsService from "../services/contactsServices.js";
 import HttpError from '../helpers/HttpError.js';
 import { createContactSchema, updateContactSchema } from "../schemas/contactsSchemas.js";
 
-export const getAllContacts = async (req, res, next) => {
-    try {
+export const getAllContacts = controllerDecorator(async (req, res) => {
         const result = await contactsService.listContacts();
         
-        res.json(result); 
-    } catch (error) {
-        next(error);
-    }
+        res.json(result);
    
-};
+})
 
-export const getOneContact = async (req, res, next) => {
-    try {
+export const getOneContact = controllerDecorator(async (req, res) => {
         const { id } = req.params;
         const result = await contactsService.getContactById(id);
         if (!result) {
@@ -22,13 +18,9 @@ export const getOneContact = async (req, res, next) => {
         }
 
         res.json(result);
-    } catch (error) {
-        next(error);
-    }
-};
+})
 
-export const deleteContact = async (req, res, next) => {
-    try {
+export const deleteContact = controllerDecorator(async (req, res) => {
         const { id } = req.params;
         const result = await contactsService.removeContact(id);
         if (!result) {
@@ -36,13 +28,9 @@ export const deleteContact = async (req, res, next) => {
         }
 
         res.json(result);
-    } catch (error) {
-        next(error);
-    }
-};
+})
 
-export const createContact = async (req, res, next) => {
-    try {
+export const createContact = controllerDecorator(async (req, res) => {
         const {error} = createContactSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
@@ -50,13 +38,9 @@ export const createContact = async (req, res, next) => {
         const result = await contactsService.addContact(req.body);
 
         res.status(201).json(result);
-    } catch (error) {
-        next(error);
-    }
-};
+})
 
-export const updateContact = async (req, res, next) => {
-    try {
+export const updateContact = controllerDecorator(async (req, res) => {
         const { error } = updateContactSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
@@ -71,7 +55,4 @@ export const updateContact = async (req, res, next) => {
         }
 
         res.json(result);
-    } catch (error) {
-        next(error);
-    }
-};
+})
