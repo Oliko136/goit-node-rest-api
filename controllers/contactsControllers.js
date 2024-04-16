@@ -1,10 +1,10 @@
 import { controllerDecorator } from "../helpers/controllerDecorator.js";
-import contactsService from "../services/contactsServices.js";
+import { listContacts, getContactById, removeContact, addContact, modifyContact } from "../services/contactsServices.js";
 import HttpError from '../helpers/HttpError.js';
 import { createContactSchema, updateContactSchema } from "../schemas/contactsSchemas.js";
 
 export const getAllContacts = controllerDecorator(async (req, res) => {
-        const result = await contactsService.listContacts();
+        const result = await listContacts();
         
         res.json(result);
    
@@ -12,7 +12,7 @@ export const getAllContacts = controllerDecorator(async (req, res) => {
 
 export const getOneContact = controllerDecorator(async (req, res) => {
         const { id } = req.params;
-        const result = await contactsService.getContactById(id);
+        const result = await getContactById(id);
         if (!result) {
             throw HttpError(404, "Not found");
         }
@@ -22,7 +22,7 @@ export const getOneContact = controllerDecorator(async (req, res) => {
 
 export const deleteContact = controllerDecorator(async (req, res) => {
         const { id } = req.params;
-        const result = await contactsService.removeContact(id);
+        const result = await removeContact(id);
         if (!result) {
             throw HttpError(404, "Not found");
         }
@@ -35,7 +35,7 @@ export const createContact = controllerDecorator(async (req, res) => {
         if (error) {
             throw HttpError(400, error.message);
         }
-        const result = await contactsService.addContact(req.body);
+        const result = await addContact(req.body);
 
         res.status(201).json(result);
 })
@@ -49,7 +49,7 @@ export const updateContact = controllerDecorator(async (req, res) => {
             throw HttpError(400, "Body must have at least one field");
         }
         const { id } = req.params;
-        const result = await contactsService.updateContact(id, req.body);
+        const result = await modifyContact(id, req.body);
         if (!result) {
             throw HttpError(404, "Not found");
         }
