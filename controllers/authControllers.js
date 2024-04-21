@@ -1,7 +1,10 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { controllerDecorator } from "../helpers/controllerDecorator.js";
 import { findUser, registerUser } from "../services/authServices.js";
 import HttpError from "../helpers/HttpError.js";
+
+const { JWT_SECRET } = process.env;
 
 export const register = controllerDecorator(async (req, res) => {
     const { email, password } = req.body;
@@ -21,5 +24,31 @@ export const register = controllerDecorator(async (req, res) => {
             subscription: result.subscription
         }
     });
+})
+
+export const login = controllerDecorator(async (req, res) => {
+    const { email, password } = req.body;
+    const user = await findUser({ email });
+    if (!user) {
+        throw HttpError(401, "Email or password is wrong");
+    }
+
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+        throw HttpError(401, "Email or password is wrong");
+    }
+
+    const payload = { id: user._id };
+
+    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
+
+    res.json({
+        token,
+        user: {
+            email: user.email,
+            subscription: user.subscription
+        }
+    })
+
 })
 
