@@ -1,7 +1,7 @@
 import Contact from './models/contactsModel.js';
 
-export const listContacts = (filter) => {
-    return Contact.find(filter);
+export const listContacts = (filter, pagination) => {
+    return Contact.find(filter, "", pagination);
 };
 
 export const getContactByFilter = (filter) => {

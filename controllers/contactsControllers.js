@@ -4,7 +4,9 @@ import HttpError from '../helpers/HttpError.js';
 
 export const getAllContacts = controllerDecorator(async (req, res) => {
     const { _id: owner } = req.user;
-    const result = await listContacts({owner}).populate("owner", "email subscription");
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await listContacts({owner}, {skip, limit}).populate("owner", "email subscription");
         
     res.json(result);
    
@@ -34,7 +36,7 @@ export const deleteContact = controllerDecorator(async (req, res) => {
 
 export const createContact = controllerDecorator(async (req, res) => {
     const { _id: owner } = req.user;
-    const result = await addContact({ ...req.body, owner }).populate("owner", "email subscription");
+    const result = await addContact({ ...req.body, owner });
 
     res.status(201).json(result);
 })
