@@ -1,25 +1,25 @@
 import Contact from './models/contactsModel.js';
 
-export const listContacts = () => {
-    return Contact.find();
+export const listContacts = (filter) => {
+    return Contact.find(filter);
 };
 
-export const getContactById = (contactId) => {
-    return Contact.findOne({ _id: contactId });
+export const getContactByFilter = (filter) => {
+    return Contact.findOne(filter);
 }
 
-export const removeContact = (contactId) => {
-    return Contact.findByIdAndDelete({ _id: contactId });
+export const removeContact = (filter) => {
+    return Contact.findOneAndDelete(filter);
 }
 
-export const addContact = ({ name, email, phone }) => {
-    return Contact.create({ name, email, phone });
+export const addContact = ({ name, email, phone, owner }) => {
+    return Contact.create({ name, email, phone, owner });
 }
 
-export const modifyContact = (contactId, body) => {
-    return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
+export const modifyContact = (filter, body) => {
+    return Contact.findOneAndUpdate(filter, body, { new: true });
 }
 
-export const updateStatusContact = (contactId, { favorite }) => {
-    return Contact.findByIdAndUpdate({ _id: contactId }, { favorite }, { new: true });
+export const updateStatusContact = (filter, { favorite }) => {
+    return Contact.findOneAndUpdate(filter, { favorite }, { new: true });
 }
