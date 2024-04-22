@@ -7,3 +7,7 @@ export const findUser = ({ email }) => {
 export const registerUser = ({ email, password }) => {
     return User.create({ email, password });
 }
+
+export const modifySubscription = ({ email }, { subscription }) => {
+    return User.findOneAndUpdate({ email }, { subscription }, { new: true });
+}

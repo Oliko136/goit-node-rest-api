@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { controllerDecorator } from "../helpers/controllerDecorator.js";
-import { findUser, registerUser } from "../services/authServices.js";
+import { findUser, registerUser, modifySubscription } from "../services/authServices.js";
 import HttpError from "../helpers/HttpError.js";
 
 const { JWT_SECRET } = process.env;
@@ -50,5 +50,17 @@ export const login = controllerDecorator(async (req, res) => {
         }
     })
 
+})
+
+export const updateSubscription = controllerDecorator(async (req, res) => {
+    const { email, subscription } = req.body;
+    const user = await findUser({ email });
+    if (!user) {
+        throw HttpError(404, "User not found");
+    }
+
+    const result = await modifySubscription({ email }, { subscription });
+
+    res.json(result);
 })
 
