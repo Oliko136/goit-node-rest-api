@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { controllerDecorator } from "../helpers/controllerDecorator.js";
-import { findUser, registerUser, modifySubscription } from "../services/authServices.js";
+import { findUser, setToken, registerUser, modifySubscription } from "../services/authServices.js";
 import HttpError from "../helpers/HttpError.js";
 
 const { JWT_SECRET } = process.env;
@@ -40,7 +40,8 @@ export const login = controllerDecorator(async (req, res) => {
 
     const payload = { id: user._id };
 
-    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+    await setToken(user._id, { token });
 
     res.json({
         token,
@@ -72,5 +73,12 @@ export const getCurrentUser = controllerDecorator(async (req, res) => {
         email,
         subscription
     })
+})
+
+export const logout = controllerDecorator(async (req, res) => {
+    const { _id } = req.user;
+    await setToken(_id, { token: null });
+    
+    res.status(204).send();
 })
 
