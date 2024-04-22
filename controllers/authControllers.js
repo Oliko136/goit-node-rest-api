@@ -53,7 +53,8 @@ export const login = controllerDecorator(async (req, res) => {
 })
 
 export const updateSubscription = controllerDecorator(async (req, res) => {
-    const { email, subscription } = req.body;
+    const { subscription } = req.body;
+    const { email } = req.user;
     const user = await findUser({ email });
     if (!user) {
         throw HttpError(404, "User not found");
@@ -62,5 +63,14 @@ export const updateSubscription = controllerDecorator(async (req, res) => {
     const result = await modifySubscription({ email }, { subscription });
 
     res.json(result);
+})
+
+export const getCurrentUser = controllerDecorator(async (req, res) => {
+    const { email, subscription } = req.user;
+
+    res.json({
+        email,
+        subscription
+    })
 })
 
