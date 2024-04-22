@@ -6,9 +6,15 @@ export const getAllContacts = controllerDecorator(async (req, res) => {
     const { _id: owner } = req.user;
     const { page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit;
-    const result = await listContacts({owner}, {skip, limit}).populate("owner", "email subscription");
+    const total = await listContacts({owner}).countDocuments();
+    const result = await listContacts({ owner }, { skip, limit }).populate("owner", "email subscription");
         
-    res.json(result);
+    res.json({
+        page,
+        perPage: limit,
+        total,
+        contacts: result
+    });
    
 })
 
