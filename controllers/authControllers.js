@@ -79,6 +79,6 @@ export const logout = controllerDecorator(async (req, res) => {
     const { _id } = req.user;
     await setToken(_id, { token: null });
     
-    res.status(204).send();
+    res.status(204);
 })
 
