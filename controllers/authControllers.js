@@ -92,7 +92,7 @@ export const updateAvatar = controllerDecorator(async (req, res) => {
     const avatarURL = path.join('avatars', newFileName);
     const result = await modifyAvatar(_id, { avatarURL });
     
-    res.json(result);
+    res.json({ avatarURL });
 })
 
 export const getCurrentUser = controllerDecorator(async (req, res) => {
