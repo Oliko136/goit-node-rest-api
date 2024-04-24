@@ -15,3 +15,7 @@ export const registerUser = ({ email, password, avatarURL }) => {
 export const modifySubscription = ({ email }, { subscription }) => {
     return User.findOneAndUpdate({ email }, { subscription }, { new: true });
 }
+
+export const modifyAvatar = (id, { avatarURL }) => {
+    return User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+}
