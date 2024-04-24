@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import gravatar from 'gravatar';
 import { controllerDecorator } from "../helpers/controllerDecorator.js";
 import { findUser, setToken, registerUser, modifySubscription } from "../services/authServices.js";
 import HttpError from "../helpers/HttpError.js";
@@ -16,12 +17,15 @@ export const register = controllerDecorator(async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const result = await registerUser({...req.body, password: hashPassword});
+    const avatarURL = gravatar.url(email);
+
+    const result = await registerUser({...req.body, password: hashPassword, avatarURL});
 
     res.status(201).json({
         user: {
             email: result.email,
-            subscription: result.subscription
+            subscription: result.subscription,
+            avatarURL: result.avatarURL
         }
     });
 })

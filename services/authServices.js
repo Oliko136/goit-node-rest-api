@@ -8,8 +8,8 @@ export const setToken = (id, { token }) => {
     return User.findByIdAndUpdate(id, { token }, { new: true });
 }
 
-export const registerUser = ({ email, password }) => {
-    return User.create({ email, password });
+export const registerUser = ({ email, password, avatarURL }) => {
+    return User.create({ email, password, avatarURL });
 }
 
 export const modifySubscription = ({ email }, { subscription }) => {

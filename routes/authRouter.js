@@ -12,6 +12,8 @@ authRouter.post('/login', validateBody(loginSchema), login);
 
 authRouter.patch('/', authenticate, validateBody(updateSubscriptionSchema), updateSubscription);
 
+authRouter.patch('/users/avatars', authenticate);
+
 authRouter.get('/current', authenticate, getCurrentUser);
 
 authRouter.post('/logout', authenticate, logout);
