@@ -1,21 +1,13 @@
 import User from './models/usersModel.js';
 
-export const findUser = ({ email }) => {
-    return User.findOne({ email });
+export const findUser = (filter) => {
+    return User.findOne(filter);
 }
 
-export const setToken = (id, { token }) => {
-    return User.findByIdAndUpdate(id, { token }, { new: true });
+export const registerUser = (data) => {
+    return User.create(data);
 }
 
-export const registerUser = ({ email, password, avatarURL }) => {
-    return User.create({ email, password, avatarURL });
-}
-
-export const modifySubscription = ({ email }, { subscription }) => {
-    return User.findOneAndUpdate({ email }, { subscription }, { new: true });
-}
-
-export const modifyAvatar = (id, { avatarURL }) => {
-    return User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+export const updateUser = (filter, data) => {
+    return User.findOneAndUpdate(filter, data, { new: true });
 }
